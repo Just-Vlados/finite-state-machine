@@ -97,7 +97,15 @@ class FSM {
      * Returns false if redo is not available.
      * @returns {Boolean}
      */
-    redo() {}
+    redo() {
+        if(this.undoHistory.length > 0) {
+            this.transitionHistory.push(this.activeState);
+            this.activeState = this.undoHistory[this.undoHistory.length-1];
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Clears transition history
