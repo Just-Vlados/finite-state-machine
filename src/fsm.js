@@ -24,8 +24,9 @@ class FSM {
      * @param state
      */
     changeState(state) {
-        this.activeState = state;
         this.transitionHistory.push(this.activeState);
+        this.activeState = state;
+        this.undoHistory = [];
         if(!this.states[state]){
             throw new Error("state isnt exist");
         }
@@ -37,7 +38,7 @@ class FSM {
      */
     trigger(event) {
         if(this.states[this.activeState].transitions[event]){
-            this.activeState = this.states[this.activeState].transitions[event];
+            this.changeState(this.states[this.activeState].transitions[event]);
         } else {
             throw new Error("state isnt exist");
         }
@@ -82,10 +83,12 @@ class FSM {
      * @returns {Boolean}
      */
     undo() {
-        if(this.activeState = this.initial){
-            return false;
+        if(this.transitionHistory.length > 0) {
+            this.undoHistory.push(this.activeState);
+            this.activeState = this.transitionHistory[this.transitionHistory.length-1];
+            return true;
         } else {
-
+            return false;
         }
     }
 
