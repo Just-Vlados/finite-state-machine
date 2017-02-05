@@ -57,7 +57,23 @@ class FSM {
      * @returns {Array}
      */
     getStates(event) {
-        return this.transitionHistory;
+        if(!event){
+            return Object.keys(this.states);
+        }
+        var array = [];
+        if(this.states.normal.transitions[event]){
+            array.push('normal');
+        }
+        if(this.states.busy.transitions[event]){
+            array.push('busy');
+        }
+        if(this.states.hungry.transitions[event]){
+            array.push('hungry');
+        }
+        if(this.states.sleeping.transitions[event]){
+            array.push('sleeping');
+        }
+        return array;
     }
 
     /**
@@ -65,7 +81,13 @@ class FSM {
      * Returns false if undo is not available.
      * @returns {Boolean}
      */
-    undo() {}
+    undo() {
+        if(this.activeState = this.initial){
+            return false;
+        } else {
+
+        }
+    }
 
     /**
      * Goes redo to state.
