@@ -3,30 +3,52 @@ class FSM {
      * Creates new FSM instance.
      * @param config
      */
-    constructor(config) {}
+    constructor(config) {
+        this.initial = config.initial;
+        this.activeState = config.initial;
+        this.states = config.states;
+        this.transitionHistory = [];
+        this.undoHistory = [];
+    }
 
     /**
      * Returns active state.
      * @returns {String}
      */
-    getState() {}
+    getState() {
+        return this.activeState;
+    }
 
     /**
      * Goes to specified state.
      * @param state
      */
-    changeState(state) {}
+    changeState(state) {
+        this.activeState = state;
+        this.transitionHistory.push(this.activeState);
+        if(!this.states[state]){
+            throw new Error("state isnt exist");
+        }
+    }
 
     /**
      * Changes state according to event transition rules.
      * @param event
      */
-    trigger(event) {}
+    trigger(event) {
+        if(this.states[this.activeState].transitions[event]){
+            this.activeState = this.states[this.activeState].transitions[event];
+        } else {
+            throw new Error("state isnt exist");
+        }
+    }
 
     /**
      * Resets FSM state to initial.
      */
-    reset() {}
+    reset() {
+        this.activeState = this.initial;
+    }
 
     /**
      * Returns an array of states for which there are specified event transition rules.
@@ -34,7 +56,9 @@ class FSM {
      * @param event
      * @returns {Array}
      */
-    getStates(event) {}
+    getStates(event) {
+        return this.transitionHistory;
+    }
 
     /**
      * Goes back to previous state.
@@ -53,7 +77,9 @@ class FSM {
     /**
      * Clears transition history
      */
-    clearHistory() {}
+    clearHistory() {
+        this.transitionHistory = [];
+    }
 }
 
 module.exports = FSM;
